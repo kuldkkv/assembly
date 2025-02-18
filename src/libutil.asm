@@ -27,7 +27,9 @@ section .text
 	global test_message
 
 ;--------
-; prints string from register ecx and string length from edx
+; prints string from register rsi and string length from rdx.
+; rax and rdi are initialised in this function and rsi and rdx
+; are setup by caller.
 ;--------
 print_string:
 	mov rax, SYS_write
@@ -38,6 +40,9 @@ print_string:
 
 ;--------
 ; exit the program with EXIT_OK as status
+; rax and rdi are initialised in this function.
+; This function is also called by C program (03_asm_from_c.c) to remove
+; dependency from libc.
 ;--------
 exit_prog:
 	mov rax, SYS_exit
@@ -45,6 +50,11 @@ exit_prog:
 	syscall
 
 
+;--------
+; prints a dummy message by calling 'print' function defined above.
+; message (mesg) and message length (mesglen) are defined in 'data' section.
+; This function is called by C program 03_asm_from_c.c
+;--------
 test_message:
 	mov rsi, mesg
 	mov rdx, mesglen
